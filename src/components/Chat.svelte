@@ -5,6 +5,7 @@
   import type { Role } from "../api/types";
   import { server } from "../config";
   import { modelsStatus } from "../stores/models";
+  import DOMPurify from "dompurify";
 
   let prompt = "";
   let sendAs = "user";
@@ -15,7 +16,7 @@
 
   const autoScroll = () => {
     setTimeout(() => {
-      messagesContainer.scrollTop = 9999999999;
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }, 100);
   };
 
@@ -102,7 +103,9 @@
 
 <div class="uk-width-expand@m">
   {#if !$selectedConversation}
-    <div class="uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-height-1-1">
+    <div
+      class="uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-height-1-1"
+    >
       {#if $modelsStatus === "loading"}
         <p>Loading model list...</p>
       {/if}
@@ -141,9 +144,6 @@
               class="chat-message uk-box-shadow-small uk-padding-small chat-message-{message.role}"
             >
               <div class="chat-actions">
-                <a href="about:blank" title="Edit" aria-label="Edit"
-                  ><i class="fas fa-pen fa-xs"></i></a
-                >
                 <a
                   href="about:blank"
                   title="Delete"
@@ -154,7 +154,7 @@
                 >
               </div>
               <section>
-                {@html markdownToHtml(message.content)}
+                {@html DOMPurify.sanitize(markdownToHtml(message.content))}
               </section>
             </div>
           </div>
@@ -165,7 +165,7 @@
               class="chat-message uk-box-shadow-small uk-padding-small chat-message-assistant"
             >
               <section>
-                {@html markdownToHtml(tempAnswer)}
+                {@html DOMPurify.sanitize(markdownToHtml(tempAnswer))}
               </section>
             </div>
           </div>

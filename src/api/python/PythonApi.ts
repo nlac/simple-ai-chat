@@ -15,7 +15,7 @@ export type PythonApiConfig = {
 };
 
 /**
- * Posting directly to LLM Studio's endpoints, persisting into browser's indexedDB
+ * Using python proxy for talking to LM Studio and for persistence
  */
 export class PythonApi extends BaseApi {
   private config: PythonApiConfig;

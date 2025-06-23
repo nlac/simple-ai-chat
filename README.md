@@ -27,3 +27,6 @@ VITE_PYTHON_PROXY_URL=http://localhost:8080
 - in the ./python_proxy directory, follow the README to start the proxy
 - start the gui by npm run dev
 
+## TODO
+
+- import/export chats from IndexedDB

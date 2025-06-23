@@ -22,6 +22,11 @@
   };
   const callCreateConversation = async () => {
     if (!selectedName || !selectedModel) {
+      errorMessage = "Name and model are mandatory";
+      return;
+    }
+    if (selectedName.length > 80) {
+      errorMessage = "Name is too long";
       return;
     }
     try {
@@ -60,6 +65,7 @@
       <div class="uk-margin">
         <label class="uk-form-label" for="form-stacked-text">Name</label>
         <input
+          required
           class="uk-input {!selectedName ||
           $conversations.find((c) => c.name === selectedName)
             ? 'uk-form-danger'
@@ -67,6 +73,7 @@
           type="text"
           placeholder="Type a unique conversation title"
           bind:value={selectedName}
+          maxlength="80"
         />
       </div>
 
