@@ -1,0 +1,105 @@
+.sidebar-container {
+  min-width: 18rem;
+}
+
+.sidebar-container hr {
+  border-color: #333;
+}
+
+.chat-container {
+  height: 100vh;
+}
+
+.chat-container>* {
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.chat-actions {
+  position: absolute;
+  top: 0;
+  right: 6px;
+}
+
+.chat-actions a {
+  color: #fff;
+  opacity: .3;
+}
+
+.chat-actions a:hover {
+  opacity: 1;
+}
+
+.chat-message {
+  position: relative;
+  width: 90%;
+  border-radius: 8px;
+}
+
+.chat-message-system {
+  background-color: #333;
+  color: #fff;
+}
+
+.chat-message-assistant {
+  background-color: #ffeef3;
+  color: #cc0033;
+}
+
+.chat-message-assistant .chat-actions a {
+  color: #000;
+}
+
+.chat-message-user {
+  background-color: #777;
+  color: #f8f8f8;
+}
+
+.chat-history li {
+  position: relative;
+  padding-right: 15px;
+}
+.chat-history li.active a {
+  color: #fff;
+}
+
+.chat-history a {
+  color: #999;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.chat-history li:hover a {
+  color: #f8f8f8;
+  opacity: 1;
+}
+
+.chat-history li .chat-actions {
+  display: none;
+}
+
+.chat-history li:hover .chat-actions {
+  display: block;
+}
+
+.chat-with-title {
+  color: #f8f8f8;
+}
+
+dialog {
+  width: unset !important;
+  max-width: unset;
+  height: 100vh;
+  border: none;
+}
+
+select:invalid {
+  color: #999 !important;
+}
+
+option:disabled {
+  display: none;
+}
