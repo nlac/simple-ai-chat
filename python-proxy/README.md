@@ -6,7 +6,7 @@ A python middleware that acts as a proxy between the GUI and LM Studio, plus it 
 
 ```pip install flask flask-cors requests```
 
-Make sure the the python-proxy/chats directory is writable.
+Make sure there's a directory ```./python-proxy/chats``` and it is writable.
 
 ## Basic start
 
