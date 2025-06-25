@@ -1,3 +1,12 @@
+:root {
+  --system-color: #fff;
+  --system-bgcolor: #333;
+  --user-color: #eee;
+  --user-bgcolor: #666;
+  --assistant-color: #333;
+  --assistant-bgcolor: #eee;
+}
+
 .sidebar-container {
   min-width: 18rem;
 }
@@ -37,13 +46,18 @@
 }
 
 .chat-message-system {
-  background-color: #333;
-  color: #fff;
+  background-color: var(--system-bgcolor);
+  color: var(--system-color);
 }
 
 .chat-message-assistant {
-  background-color: #ffeef3;
-  color: #cc0033;
+  border: 1px solid #ddd;
+  background-color: var(--assistant-bgcolor);
+  color: var(--assistant-color);
+}
+
+.chat-message-assistant em {
+  color: var(--assistant-color);
 }
 
 .chat-message-assistant .chat-actions a {
@@ -51,14 +65,15 @@
 }
 
 .chat-message-user {
-  background-color: #777;
-  color: #f8f8f8;
+  background-color: var(--user-bgcolor);
+  color: var(--user-color);
 }
 
 .chat-history li {
   position: relative;
   padding-right: 15px;
 }
+
 .chat-history li.active a {
   color: #fff;
 }
@@ -73,7 +88,7 @@
 }
 
 .chat-history li:hover a {
-  color: #f8f8f8;
+  color: #fff;
   opacity: 1;
 }
 
@@ -86,7 +101,7 @@
 }
 
 .chat-with-title {
-  color: #f8f8f8;
+  color: #fff;
 }
 
 dialog {

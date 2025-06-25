@@ -4,11 +4,13 @@ A Svelte/TS SPA solution as a client for LM Studio' OpenAI-like endpoints, prima
 
 For fun, a python proxy is provided that acts as a persistence-capable proxy to LM Studio, and the GUI can be simply configured for this mode, instead of the default browser-only mode.
 
-## Building
+## Installing, building
 
 The build is managed by Vite, the standard commands are available.
 
 ```npm install```
+
+```npm run build```
 
 ## Running
 
@@ -21,7 +23,7 @@ Then run the app by
 
 ```npm run dev```
 
-## Configuring options
+## Configuration
 
 Create an environment file .env in the root like this, adjust the properties for your environment:
 
