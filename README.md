@@ -1,8 +1,10 @@
 # Simple AI Chat
 
-A Svelte/TS SPA solution as a client for LM Studio' OpenAI-like endpoints, primarily for local experiments. By default it talks directly to LM Studio and persist the conversations to the browser's indexedDB storage.
+A [Svelte](https://svelte.dev/)/TS SPA solution as a client for [LM Studio](https://lmstudio.ai)' OpenAI-like endpoints, primarily for local experiments. By default it talks directly to LM Studio and persist the conversations to the browser's indexedDB storage.
 
 For fun, a python proxy is provided that acts as a persistence-capable proxy to LM Studio, and the GUI can be simply configured for this mode, instead of the default browser-only mode.
+
+The design is built on [UIkit](https://getuikit.com/).
 
 ## Installing, building
 

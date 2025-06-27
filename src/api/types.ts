@@ -9,7 +9,7 @@ export type Message = {
 // https://lmstudio.ai/docs/app/api/endpoints/openai
 // https://platform.openai.com/docs/api-reference/chat/create
 export type ConversationOptions = {
-  temperature: number; // 0.8
+  temperature: number; // 0.7
   max_tokens: number; // -1
   top_k: number; // 40
   top_p: number; // 0.95

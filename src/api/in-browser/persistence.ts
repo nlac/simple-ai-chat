@@ -1,6 +1,10 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
 
-import type { ConversationOptions, DbConversation } from "../types";
+import type {
+  ConversationOptions,
+  ConversationTitle,
+  DbConversation,
+} from "../types";
 
 const DB_NAME = "ai-chat";
 const DB_VERSION = 1;
@@ -98,7 +102,7 @@ export const createConversation = async (
   );
 
 export const loadConversations = async () =>
-  indexedDbRequest(
+  indexedDbRequest<ConversationTitle[]>(
     false,
     (store) => store.getAll(),
     (resolve, request) => {
@@ -113,10 +117,60 @@ export const loadConversations = async () =>
   );
 
 export const loadConversation = async (id: unknown) =>
-  indexedDbRequest(false, (store) => store.get(id as number));
+  indexedDbRequest<DbConversation>(false, (store) => store.get(id as number));
 
 export const updateConversation = async (conversation: DbConversation) =>
   indexedDbRequest(true, (store) => store.put(conversation));
 
 export const deleteConversation = async (id: unknown) =>
   indexedDbRequest(true, (store) => store.delete(id as number));
+
+export const exportConversations = async () =>
+  indexedDbRequest<DbConversation[]>(
+    false,
+    (store) => store.getAll(),
+    (resolve, request) => {
+      resolve(request.result);
+    }
+  );
+
+export const importConversations = async (
+  conversations: DbConversation[],
+  existingConversationTitles: string[]
+) => {
+  const db = await openDb();
+  const transaction = db.transaction([DB_STORE], "readwrite");
+  const store = transaction.objectStore(DB_STORE);
+
+  let imported = 0;
+  let resolve: (value: number | PromiseLike<number>) => void;
+  let reject: (reason?: any) => void;
+  const result = new Promise<number>((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
+  transaction.oncomplete = (e: Event) => {
+    return resolve(imported);
+  };
+
+  for (const conv of conversations) {
+    const clone = { ...conv };
+    delete clone.id;
+
+    while (existingConversationTitles.find((name) => name === clone.name)) {
+      clone.name += "1";
+    }
+
+    const request = store.add(clone);
+    existingConversationTitles.push(clone.name);
+    
+    request.onsuccess = () => {
+      imported++;
+    };
+    request.onerror = () => {
+      console.error("import error: ", transaction.error, "conversation:", conv);
+    };
+  }
+
+  return result;
+};

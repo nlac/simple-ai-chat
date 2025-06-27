@@ -1,7 +1,4 @@
-/**
- * TODO: implement a python LLM server or a middleware between LM Studio and the gui + it should persist the conversations
-   + extend BaseApi here to be able to communicate with it.
- */
+// client for the python proxy
 import { BaseApi } from "../BaseApi";
 import type {
   ConversationTitle,

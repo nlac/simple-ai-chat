@@ -5,12 +5,13 @@
   import { models } from "../stores/models";
   import { setSelectedConversation } from "../stores/selectedConversation";
 
-  let selectedModel = "";
-  let selectedName = "";
-  let config: Partial<ConversationOptions> = {
+  const defaultConfig: Partial<ConversationOptions> = {
     max_tokens: -1,
     temperature: 0.7,
   };
+  let selectedModel = "";
+  let selectedName = "";
+  let config = { ...defaultConfig };
   let errorMessage = "";
   let createDialog: HTMLDialogElement;
 
@@ -40,10 +41,7 @@
         setSelectedConversation(id);
         selectedName = "";
         errorMessage = "";
-        config = {
-          max_tokens: -1,
-          temperature: 0.7,
-        };
+        config = { ...defaultConfig };
         closeDialog();
       }
     } catch (err) {
@@ -120,7 +118,7 @@
       {/if}
       <p class="uk-text-right">
         <button
-          class="uk-button uk-button-default uk-modal-close"
+          class="uk-button uk-button-default uk-modal-close uk-margin-small-right"
           type="button"
           on:click={closeDialog}>Cancel</button
         >
