@@ -162,9 +162,9 @@ export const importConversations = async (
     }
 
     const request = store.add(clone);
-    existingConversationTitles.push(clone.name);
-    
+
     request.onsuccess = () => {
+      existingConversationTitles.push(clone.name);
       imported++;
     };
     request.onerror = () => {

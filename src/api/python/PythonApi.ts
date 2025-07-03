@@ -1,21 +1,16 @@
 // client for the python proxy
-import { BaseApi } from "../BaseApi";
-import type {
-  ConversationTitle,
-  DbConversation,
-  GetModelsResponse,
-} from "../types";
+import { BaseApi, type ApiConfig } from "../BaseApi";
+import type { ConversationTitle, DbConversation } from "../types";
 
-export type PythonApiConfig = {
-  lmStudioUrl?: string;
-  proxyUrl?: string;
+export type PythonApiConfig = ApiConfig & {
+  proxyUrl: string;
 };
 
 /**
  * Using python proxy for talking to LM Studio and for persistence
  */
 export class PythonApi extends BaseApi {
-  private config: PythonApiConfig;
+  protected config: PythonApiConfig;
   constructor(config: PythonApiConfig) {
     super();
     this.config = config;
@@ -88,17 +83,5 @@ export class PythonApi extends BaseApi {
       },
       abortSignal
     );
-  };
-
-  getModels = async () => {
-    const response: GetModelsResponse = await (
-      await fetch(`${this.config.lmStudioUrl}/models`, {
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-    ).json();
-    return response.data.map((item) => item.id);
   };
 }

@@ -114,7 +114,12 @@
         title="Imports an export file - new chats will be appended"
       >
         Import
-        <input type="file" id="import-button" on:change={importFromJson} />
+        <input
+          type="file"
+          id="import-button"
+          on:change={importFromJson}
+          accept="application/json"
+        />
       </label>
     </div>
   {/if}

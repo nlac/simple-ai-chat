@@ -1,5 +1,5 @@
-import { BaseApi } from "../BaseApi";
-import type { DbConversation, GetModelsResponse } from "../types";
+import { BaseApi, type ApiConfig } from "../BaseApi";
+import type { DbConversation } from "../types";
 
 import {
   loadConversations,
@@ -9,15 +9,13 @@ import {
   updateConversation,
 } from "./persistence";
 
-export type InBrowserApiConfig = {
-  lmStudioUrl: string;
-};
+export type InBrowserApiConfig = ApiConfig;
 
 /**
  * Posting directly to LLM Studio's endpoints, persisting into browser's indexedDB
  */
 export class InBrowserApi extends BaseApi {
-  private config: InBrowserApiConfig;
+  protected config: InBrowserApiConfig;
   constructor(config: InBrowserApiConfig) {
     super();
     this.config = config;
@@ -50,17 +48,5 @@ export class InBrowserApi extends BaseApi {
       },
       signal: abortSignal,
     });
-  };
-
-  getModels = async () => {
-    const response: GetModelsResponse = await (
-      await fetch(`${this.config.lmStudioUrl}/models`, {
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-    ).json();
-    return response.data.map((item) => item.id);
   };
 }

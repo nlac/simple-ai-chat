@@ -2,6 +2,7 @@ import type {
   ConversationOptions,
   ConversationTitle,
   DbConversation,
+  GetModelsResponse,
   PostConversationResponse,
 } from "./types";
 
@@ -41,16 +42,26 @@ const streamer = async (
   }
 };
 
-export abstract class BaseApi {
-  constructor() {}
+export type ApiConfig = {
+  lmStudioUrl: string;
+};
 
-  abstract getModels(): Promise<string[]>;
+export abstract class BaseApi {
+  protected config: ApiConfig = {
+    lmStudioUrl: "",
+  };
+
+  constructor() {}
 
   abstract loadConversations(): Promise<ConversationTitle[]>;
 
   abstract loadConversation(id: unknown): Promise<DbConversation>;
 
-  abstract createConversation(name: string, model: string, config: Partial<ConversationOptions>): Promise<unknown>;
+  abstract createConversation(
+    name: string,
+    model: string,
+    config: Partial<ConversationOptions>
+  ): Promise<unknown>;
 
   abstract updateConversation(conversation: DbConversation): Promise<unknown>;
 
@@ -102,5 +113,19 @@ export abstract class BaseApi {
     return () => {
       controller.abort();
     };
+  };
+
+  getModels = async () => {
+    const response: GetModelsResponse = await (
+      await fetch(`${this.config.lmStudioUrl}/models`, {
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    ).json();
+    return response.data
+      .filter((item) => !item.id.startsWith("text-embedding"))
+      .map((item) => item.id);
   };
 }

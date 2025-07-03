@@ -116,7 +116,7 @@
       {#if errorMessage}
         <p class="uk-form-danger">{errorMessage}</p>
       {/if}
-      <p class="uk-text-right">
+      <div class="uk-text-right">
         <button
           class="uk-button uk-button-default uk-modal-close uk-margin-small-right"
           type="button"
@@ -127,7 +127,7 @@
           type="button"
           on:click={callCreateConversation}>Create</button
         >
-      </p>
+      </div>
     </form>
   </div>
 </dialog>
