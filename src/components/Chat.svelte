@@ -6,6 +6,7 @@
   import { server } from "../config";
   import { modelsStatus } from "../stores/models";
   import DOMPurify from "dompurify";
+  import { editedConversationIndex } from "../stores/editedConversation";
 
   let prompt = "";
   let sendAs = "user";
@@ -76,6 +77,21 @@
     return false;
   };
 
+  const editMessage = async (e: MouseEvent, idx: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    editedConversationIndex.set(idx);
+    setTimeout(() => {
+      const editor = document.querySelector(
+        `#edited-message-${idx}`
+      ) as HTMLTextAreaElement;
+      if (editor) {
+        editor.focus();
+      }
+    }, 100);
+    return false;
+  };
+
   const deleteMessage = async (e: MouseEvent, idx: number) => {
     e.preventDefault();
     e.stopPropagation();
@@ -88,9 +104,27 @@
     return false;
   };
 
+  const saveMessage = async (e: MouseEvent, idx: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if ($selectedConversation) {
+      await server.updateConversation($selectedConversation);
+      selectedConversation.set($selectedConversation);
+    }
+    editedConversationIndex.set(-1);
+    return false;
+  };
+
+  const cancelEdit = async (e: MouseEvent | KeyboardEvent, idx: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    editedConversationIndex.set(-1);
+    return false;
+  };
+
   // things to do on chat selection
   const unsubscribe = selectedConversation.subscribe((state) => {
-    if (state) {
+    if (state && $editedConversationIndex < 0) {
       setTimeout(() => {
         promptInput.focus();
         autoScroll();
@@ -141,21 +175,64 @@
               : 'right'} uk-margin-small-bottom"
           >
             <div
-              class="chat-message uk-box-shadow-small uk-padding-small chat-message-{message.role}"
+              class="chat-message uk-box-shadow-small uk-padding-small chat-message-{message.role} {$editedConversationIndex ===
+              idx
+                ? 'edited'
+                : ''}"
             >
               <div class="chat-actions">
                 <a
+                  class="non-editing"
+                  href="about:blank"
+                  title="Edit"
+                  aria-label="Edit"
+                  on:click={(e) => editMessage(e, idx)}
+                >
+                  <i class="fas fa-pen fa-xs"></i>
+                </a>
+                <a
+                  class="non-editing"
                   href="about:blank"
                   title="Delete"
                   aria-label="Delete"
-                  class="uk-margin-small-left"
                   on:click={(e) => deleteMessage(e, idx)}
                   ><i class="fas fa-trash fa-xs"></i></a
                 >
+                <a
+                  class="editing"
+                  href="about:blank"
+                  title="Save"
+                  aria-label="Save"
+                  on:click={(e) => saveMessage(e, idx)}
+                >
+                  <i class="fas fa-check fa-xs"></i>
+                </a>
+                <a
+                  class="editing"
+                  href="about:blank"
+                  title="Cancel"
+                  aria-label="cancel"
+                  on:click={(e) => cancelEdit(e, idx)}
+                >
+                  <i class="fas fa-ban fa-xs"></i>
+                </a>
               </div>
-              <section>
+              <section class="non-editing">
                 {@html DOMPurify.sanitize(markdownToHtml(message.content))}
               </section>
+              {#if ($editedConversationIndex >= 0 && !tempAnswer)}
+                <textarea
+                  id={`edited-message-${idx}`}
+                  class="uk-textarea editing"
+                  bind:value={message.content}
+                  on:keyup={(e) => {
+                    if (e.key === "Escape") {
+                      cancelEdit(e, idx);
+                    }
+                  }}
+                  rows="8"
+                ></textarea>
+              {/if}
             </div>
           </div>
         {/each}

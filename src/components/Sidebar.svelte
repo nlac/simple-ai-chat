@@ -12,12 +12,14 @@
     exportConversations,
     importConversations,
   } from "../api/in-browser/persistence";
+  import { editedConversationIndex } from "../stores/editedConversation";
 
   const isInBrowserApi = server instanceof InBrowserApi;
 
   const selectChat = async (e: MouseEvent, conv: ConversationTitle) => {
     e.stopPropagation();
     e.preventDefault();
+    editedConversationIndex.set(-1);
     await setSelectedConversation(conv.id as number);
     return false;
   };
