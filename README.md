@@ -1,10 +1,49 @@
 # Simple AI Chat
 
-A [Svelte](https://svelte.dev/)/TS SPA solution as a client for [LM Studio](https://lmstudio.ai)' OpenAI-like endpoints, primarily for local experiments. By default it talks directly to LM Studio and persist the conversations to the browser's indexedDB storage.
+A compact, developer-focused example of building a minimal local chat interface that integrates with a local LLM backend ([LM Studio](https://lmstudio.ai)).
 
-For fun, a python proxy is provided that acts as a persistence-capable proxy to LM Studio, and the GUI can be simply configured for this mode, instead of the default browser-only mode.
+## Features
+- Svelte SPA, providing two modes for communicating with LM Studio:
+  - Browser-only mode (default): GUI talks directly to LM Studio and stores chats in IndexedDB.
+  - Python proxy mode: an optional lightweight Flask proxy that provides file-based persistence (JSON) and forwards streaming responses from LM Studio.
+- handling streaming response with Streams API
+- edit/delete messages
+- import/export conversations
 
-The design is built on [UIkit](https://getuikit.com/).
+<img src="./sac1.jpg" alt="Alt Text" width="75%" />
+<img src="./sac2.jpg" alt="Alt Text" width="75%" />
+<img src="./sac3.jpg" alt="Alt Text" width="75%" />
+
+## Stack
+
+- Frontend: [Svelte 5](https://svelte.dev/), [TypeScript](https://typescriptlang.org) (building: [Vite](https://vite.dev))
+- Design: [UIkit](https://getuikit.com) + [Font Awesome](https://fontawesome.com)
+- Optional proxy: Python (Flask)
+
+## Configuration
+
+In an environment file (.env) in the root, you can adjust the following properties:
+
+| Environment Variable | Description | Default Value |
+|---------------------|-------------|---------------|
+| VITE_MIDDLEWARE | Middleware type: `local` (no middleware) or `python` | `local` |
+| VITE_LM_STUDIO_URL | LM Studio API endpoint URL | `http://localhost:1234/v1` |
+| VITE_PYTHON_PROXY_URL | Python proxy server URL | `http://localhost:8080` |
+
+Example:
+```
+VITE_MIDDLEWARE=local
+VITE_LM_STUDIO_URL=http://localhost:1234/v1
+VITE_PYTHON_PROXY_URL=http://localhost:8080
+```
+
+## How to use the python proxy
+
+The app reads its configuration from environment variables
+
+- set VITE_MIDDLEWARE to "python"
+- in the ./python_proxy directory, follow the README to prepare and start the proxy
+
 
 ## Installing, building
 
@@ -24,23 +63,3 @@ LM Studio server must installed and running. It can be started either from its U
 Then run the app by 
 
 ```npm run dev```
-
-## Configuration
-
-Create an environment file .env in the root like this, adjust the properties for your environment:
-
-```
-VITE_MIDDLEWARE=local # local|python
-VITE_LM_STUDIO_URL=http://localhost:1234/v1
-VITE_PYTHON_PROXY_URL=http://localhost:8080
-```
-
-## How to use the python proxy
-
-- set VITE_MIDDLEWARE to "python"
-- in the ./python_proxy directory, follow the README to prepare and start the proxy
-- start the gui by npm run dev
-
-## TODO
-
-- import/export chats from IndexedDB
